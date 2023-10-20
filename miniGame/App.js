@@ -36,7 +36,7 @@ export default function App() {
   
 
   function startNewGameHandler() {
-    setGuessRounds(0);
+    setNumberOfRounds(0);
     setRandomWord('');
   }
 
@@ -45,9 +45,10 @@ export default function App() {
   if (gameIsOver && randomWord) {
     screen = (
       <GameOverScreen
-        numberOfRounds={numberOfRounds}
-        onNewGame={startNewGameHandler}
-      />
+      numberOfRounds={numberOfRounds}
+      onStartNewGame={startNewGameHandler}
+    />
+    
     );
   } else if (randomWord) {
     screen = (
@@ -69,7 +70,7 @@ export default function App() {
   return (
     <LinearGradient colors={[Colors.primary700, Colors.primary600, Colors.primary500, Colors.primary400]} style={styles.rootScrene}>
       <ImageBackground
-        source={require('./assets/images/test.jpg')}
+        source={require('./assets/images/backgroundWood.jpg')}
         style={styles.rootScrene}
         imageStyle={styles.backgroundImage}
       >
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     resizeMode: 'cover',
-    opacity: 0.1,
+    opacity: 0.4,
     justifyContent: 'center',
     alignItems: 'flex-end'
   }
