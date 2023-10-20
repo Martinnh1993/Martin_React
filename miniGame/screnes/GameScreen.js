@@ -18,6 +18,7 @@ function GameScreen({ randomWord, onGameOver, numberOfRounds  }) {
   const [wrongLetters, setWrongLetters] = useState([]);
   const maxAttempts = 6;
   const [attempts, setAttempts] = useState(maxAttempts);
+  // const {isWordGuessed, setIsWordGuessed} = useState(false);
 
   useEffect(() => {
     if (attempts <= 0) {
@@ -31,10 +32,23 @@ function GameScreen({ randomWord, onGameOver, numberOfRounds  }) {
 
   function confirmInputHandler() {
     const enteredText = enteredValue.trim().toLowerCase();
+
+    if (isWordGuessed(guessedLetters, randomWord)) {
+      // Handle game over for a correct word guess
+      onGameOver(maxAttempts - attempts);
+      return; // Exit the function to prevent further processing
+    }
+  
     if (guessedLetters.includes(enteredText)) {
       setEnteredValue('');
       Alert.alert('Duplicate Guess', 'You already guessed this letter/word.', [{ text: 'Okay' }]);
       return;
+    }
+  
+    if (enteredText === randomWord) {
+      // Handle game over for a correct word guess
+      onGameOver(maxAttempts - attempts);
+      return; // Exit the function to prevent further processing
     }
   
     if (enteredText.length === 1) {
@@ -47,25 +61,38 @@ function GameScreen({ randomWord, onGameOver, numberOfRounds  }) {
     } else {
       setGuessedLetters((prevLetters) => [...prevLetters, enteredText]);
   
-      if (enteredText === randomWord) {
+      // Check if all letters have been correctly guessed
+      if (isWordGuessed(guessedLetters, randomWord)) {
         // Handle game over for a correct word guess
         onGameOver(maxAttempts - attempts);
         return; // Exit the function to prevent further processing
-      } else {
-        setAttempts((prevAttempts) => prevAttempts - 1);
-        setWrongLetters((prevWrongLetters) => [...prevWrongLetters, enteredText]);
       }
-    }
   
-    // Check if all letters have been correctly guessed
-    const isWordGuessed = randomWord.split('').every(letter => guessedLetters.includes(letter));
-    if (isWordGuessed) {
-      // Handle game over for a correct word guess
-      onGameOver(maxAttempts - attempts);
+      setAttempts((prevAttempts) => prevAttempts - 1);
+      setWrongLetters((prevWrongLetters) => [...prevWrongLetters, enteredText]);
     }
   
     setEnteredValue('');
   }
+  
+  function isWordGuessed(guessedLetters, randomWord) {
+    // Initialize an array to track which letters have been guessed
+    const lettersGuessed = new Array(randomWord.length).fill(false);
+  
+    // Loop through guessed letters and update the corresponding index in lettersGuessed
+    for (const letter of guessedLetters) {
+      const index = randomWord.indexOf(letter);
+      if (index !== -1) {
+        lettersGuessed[index] = true;
+      }
+    }
+  
+    // Check if all letters have been guessed
+    return lettersGuessed.every((guessed) => guessed);
+  }
+  
+  
+  
   
   
 

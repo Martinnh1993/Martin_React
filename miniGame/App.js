@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     resizeMode: 'cover',
-    opacity: 0.4,
+    opacity: 1,
     justifyContent: 'center',
     alignItems: 'flex-end'
   }
