@@ -59,19 +59,10 @@ export default function App() {
   } else {
     screen = (
       <StartGameScreen onRandomWord={randomWordHandler} />
-    );
-  }
-
-
-  if (gameIsOver && randomWord) {
-    screen = (
-      <GameScreen
-        onGameOver={gameOverHandler}
-        randomWord={randomWord}
-      />
-    );
-  }
-
+    )
+    }
+  
+  
 
   
 

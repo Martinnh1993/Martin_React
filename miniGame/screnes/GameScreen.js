@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
-import { View, StyleSheet, Alert, Text, FlatList, TextInput, KeyboardAvoidingView, ScrollView, StatusBar } from "react-native";
+import { View, StyleSheet, Alert, TextInput } from "react-native";
 
-import Title from "../components/ui/Title"; 
-import NumberContainer from "../components/game/NumberContainer";
+
 import PrimaryButton from "../components/ui/PrimaryButton";
 import Card from "../components/ui/Card";
 import Colors from "../constants/colors";
 import InstructionText from "../components/ui/InstructionText";
-import GuessLogItem from "../components/game/GuessLogItem";
 import ManFigure from "../components/ui/ManFigur";
 import WordBox from "../components/ui/WordBox";
 import KeyboardAvoidingContainer from "../components/KeyboardAvoidingContainer";
