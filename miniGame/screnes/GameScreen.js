@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, StyleSheet, Alert, Text, FlatList, TextInput} from "react-native";
+import { View, StyleSheet, Alert, Text, FlatList, TextInput, KeyboardAvoidingView, ScrollView, StatusBar } from "react-native";
 
 import Title from "../components/ui/Title"; 
 import NumberContainer from "../components/game/NumberContainer";
@@ -10,156 +10,145 @@ import InstructionText from "../components/ui/InstructionText";
 import GuessLogItem from "../components/game/GuessLogItem";
 import ManFigure from "../components/ui/ManFigur";
 import WordBox from "../components/ui/WordBox";
+import KeyboardAvoidingContainer from "../components/KeyboardAvoidingContainer";
 
 
 
-function GameScreen({ userNumber, randomWord, onGameOver }) {
-    const [enteredValue, setEnteredValue] = useState('');
-    const [word, setWord] = useState(userNumber);
-    const [guessedLetters, setGuessedLetters] = useState([]);
-    const [wrongLetters, setWrongLetters] = useState([]);
-    const maxAttempts = 6;
-    const [attempts, setAttempts] = useState(maxAttempts);
- 
+function GameScreen({ randomWord, onGameOver, numberOfRounds  }) {
+  const [enteredValue, setEnteredValue] = useState('');
+  const [guessedLetters, setGuessedLetters] = useState([]);
+  const [wrongLetters, setWrongLetters] = useState([]);
+  const maxAttempts = 6;
+  const [attempts, setAttempts] = useState(maxAttempts);
 
-    function confirmInputHandler() {
-        const enteredText = enteredValue.trim().toLowerCase(); // Convert the input to lowercase and remove leading/trailing whitespace
-        if (guessedLetters.includes(enteredText)) {
-          // Clear the input when the same letter/word is guessed again
-          setEnteredValue('');
-          // Alert when the same letter/word is guessed again
-          Alert.alert('Duplicate Guess', 'You already guessed this letter/word.', [{ text: 'Okay' }]);
-          return;
-        }
-      
-        if (enteredText.length === 1) {
-          // Handle single letter guess
-          // Place your logic for processing single letter guesses here
-          setGuessedLetters((prevLetters) => [...prevLetters, enteredText]);
-      
-          if (!randomWord.includes(enteredText)) {
-            // Update attempts and wrong letters for incorrect letter guess
-            setAttempts((prevAttempts) => prevAttempts - 1);
-            setWrongLetters((prevWrongLetters) => [...prevWrongLetters, enteredText]);
-          }
-        } else if (enteredText.length === randomWord.length) {
-          // Handle word guess
-          setGuessedLetters((prevLetters) => [...prevLetters, enteredText]);
-      
-          if (enteredText === randomWord) {
-            // Handle a correct word guess
-          } else {
-            // Update attempts and wrong letters for incorrect word guess
-            setAttempts((prevAttempts) => prevAttempts - 1);
-            setWrongLetters((prevWrongLetters) => [...prevWrongLetters, enteredText]);
-          }
-        } else {
-          // Alert when input doesn't match the letter or the word
-          Alert.alert('Invalid Guess', 'Please enter a single letter or a word of the correct length.', [{ text: 'Okay' }]);
-        }
-      
-        // Clear the input after processing
-        setEnteredValue('');
+  useEffect(() => {
+    if (attempts <= 0) {
+      // Calculate roundsRemaining based on the number of attempts remaining
+      const roundsRemaining = maxAttempts - attempts;
+      onGameOver(roundsRemaining); // Pass roundsRemaining to onGameOver
+    }
+  }, [attempts, onGameOver]);
+  
+
+
+  function confirmInputHandler() {
+    const enteredText = enteredValue.trim().toLowerCase();
+    if (guessedLetters.includes(enteredText)) {
+      setEnteredValue('');
+      Alert.alert('Duplicate Guess', 'You already guessed this letter/word.', [{ text: 'Okay' }]);
+      return;
+    }
+  
+    if (enteredText.length === 1) {
+      setGuessedLetters((prevLetters) => [...prevLetters, enteredText]);
+  
+      if (!randomWord.includes(enteredText)) {
+        setAttempts((prevAttempts) => prevAttempts - 1);
+        setWrongLetters((prevWrongLetters) => [...prevWrongLetters, enteredText]);
       }
-      
-      
-      
-    
-      function resetInputHandler() {
-        setEnteredValue('');
+    } else {
+      setGuessedLetters((prevLetters) => [...prevLetters, enteredText]);
+  
+      if (enteredText === randomWord) {
+        // Handle game over for a correct word guess
+        onGameOver(maxAttempts - attempts);
+        return; // Exit the function to prevent further processing
+      } else {
+        setAttempts((prevAttempts) => prevAttempts - 1);
+        setWrongLetters((prevWrongLetters) => [...prevWrongLetters, enteredText]);
       }
+    }
+  
+    // Check if all letters have been correctly guessed
+    const isWordGuessed = randomWord.split('').every(letter => guessedLetters.includes(letter));
+    if (isWordGuessed) {
+      // Handle game over for a correct word guess
+      onGameOver(maxAttempts - attempts);
+    }
+  
+    setEnteredValue('');
+  }
+  
+  
 
-    function textInputHandler(enteredText) {
-        setEnteredValue(enteredText);
-      }
+  function resetInputHandler() {
+      setEnteredValue('');
+  }
 
-    return (
-        <View style={styles.screen}>
-           <Title>Hangman</Title>
-           <WordBox word={randomWord} guessedLetters={guessedLetters} />
-           <ManFigure wrongWord={wrongLetters.length} />
-           <Card>
-            <InstructionText style={styles.text}>Guess on a letter or a word</InstructionText>
-            <InstructionText style={styles.smallText}>You have: {attempts} attempts left</InstructionText>
-            <TextInput
-            style={styles.textInput}
-            maxLength={30}
-            autoCapitalize="none"
-            autoCorrect={false}
-            onChangeText={textInputHandler}
-            value={enteredValue}
-            onSubmitEditing={confirmInputHandler} // This line sets the function to be called on submit
-            />
-            <View style={styles.buttonsContainer}>
-                <View style={styles.buttonContainer}>
-                    <PrimaryButton onPress={resetInputHandler}>Reset</PrimaryButton>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <PrimaryButton onPress={confirmInputHandler}>Confirm</PrimaryButton>
-                </View>
-            </View>
-           </Card>
+  function textInputHandler(enteredText) {
+      setEnteredValue(enteredText);
+  }
 
-           
-           {/* <WordBox word={randomWord} guessedLetters={guessedLetters} /> */}
-           {/* <View style={styles.listContainer}>
-                <FlatList 
-                data={guessRounds} 
-                renderItem={(itemData) => (
-                <GuessLogItem 
-                    roundNumber={guessRoundsListLength - itemData.index} 
-                    guess={itemData.item}
-                />
-                )}
-                keyExtractor={(item) => item}
-                />
-            </View> */}
-        </View>
-    );
+  return (
+      <KeyboardAvoidingContainer style={styles.screen}>
+          <WordBox word={randomWord} guessedLetters={guessedLetters} />
+          <View style={styles.hangmanContainer}>
+              <ManFigure wrongWord={wrongLetters.length} style={styles.screen} />
+          </View>
+          <Card>
+              <InstructionText style={styles.text}>Guess on a letter or a word</InstructionText>
+              <InstructionText style={styles.smallText}>You have: {attempts} attempts left</InstructionText>
+              <TextInput
+                  style={styles.textInput}
+                  maxLength={30}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  onChangeText={textInputHandler}
+                  value={enteredValue}
+                  onSubmitEditing={confirmInputHandler}
+              />
+
+              <View style={styles.buttonsContainer}>
+                  <View style={styles.buttonContainer}>
+                      <PrimaryButton onPress={resetInputHandler}>Reset</PrimaryButton>
+                  </View>
+                  <View style={styles.buttonContainer}>
+                      <PrimaryButton onPress={confirmInputHandler}>Confirm</PrimaryButton>
+                  </View>
+              </View>
+          </Card>
+      </KeyboardAvoidingContainer>
+  );
 }
 
 export default GameScreen;
 
 const styles = StyleSheet.create({
-    screen: {
-        flex: 1,
-        padding: 24
-    },
-    instructionText: {
-        marginBottom: 12
-    },
-    buttonsContainer: {
-        flexDirection: 'row'
-    },
-    bottonContainer: {
-        flex: 1
-    },
-    listContainer: {
-        flex: 1,
-        padding: 16
-    },
-    textInput: {
-        height: 50,
-        width: 100,
-        fontSize: 32,
-        borderBottomColor: Colors.accent500,
-        borderBottomWidth: 2,
-        color: Colors.accent500,
-        marginVertical: 8,
-        fontWeight: 'bold',
-        textAlign: 'center',
-      },
-      text: {
-        fontSize: 20 
-      },
-      smallText: {
-        fontSize: 15
-      },    
-      buttonsContainer: {
-        flexDirection: 'row',
-      },
-      buttonContainer: {
-        flex: 1,
-      },
-      
+  screen: {
+      padding: 24,
+  },
+  instructionText: {
+      marginBottom: 12,
+  },
+  listContainer: {
+      flex: 1,
+      padding: 16,
+  },
+  textInput: {
+      height: 50,
+      width: 100,
+      fontSize: 32,
+      borderBottomColor: Colors.accent500,
+      borderBottomWidth: 2,
+      color: Colors.accent500,
+      marginVertical: 8,
+      fontWeight: 'bold',
+      textAlign: 'center',
+  },
+  text: {
+      fontSize: 20,
+  },
+  smallText: {
+      fontSize: 15,
+  },
+  buttonsContainer: {
+      flexDirection: 'row',
+  },
+  buttonContainer: {
+      flex: 1,
+  },
+  hangmanContainer: {
+      justifyContent: 'center',
+      alignItems: 'center',
+  },
 });

@@ -10,10 +10,10 @@ import GameOverScreen from './screnes/GameOverScreen';
 import Colors from './constants/colors';
 
 export default function App() {
-  const [userNumber, setUserNr] = useState();
   const [gameIsOver, setGameIsOver] = useState(true);
   const [randomWord, setRandomWord] = useState('');
-  const [guessRounds, setGuessRounds] = useState(0);
+  const [numberOfRounds, setNumberOfRounds] = useState(0);
+
   
   const [fontsLoaded] = useFonts({
     'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
@@ -24,52 +24,56 @@ export default function App() {
     return <AppLoading />;
   }
 
-  function pickedNumberHandler(pickedNumber) {
-    setUserNr(pickedNumber);
-    setGameIsOver(false);
-  }
-
   function randomWordHandler(word) {
     setRandomWord(word);
+    setGameIsOver(false);
   }
 
   function gameOverHandler(numberOfRounds) {
     setGameIsOver(true);
-    setGuessRounds(numberOfRounds);
+    setNumberOfRounds(numberOfRounds);
   }
+  
 
   function startNewGameHandler() {
-    setUserNr(null);
     setGuessRounds(0);
     setRandomWord('');
   }
 
-  let screen = <StartGameScreen onPickNumber={pickedNumberHandler} onRandomWord={randomWordHandler} />;
+  let screen = null;
 
-  if (userNumber) {
-    if (randomWord) {
-      screen = (
-        <GameScreen
-          userNumber={userNumber}
-          onGameOver={gameOverHandler}
-          randomWord={randomWord}
-        />
-      );
-    } else {
-      // Handle loading or show a placeholder until randomWord is available.
-    }
-  }
-
-  if (gameIsOver && userNumber) {
+  if (gameIsOver && randomWord) {
+    screen = (
+      <GameOverScreen
+        numberOfRounds={numberOfRounds}
+        onNewGame={startNewGameHandler}
+      />
+    );
+  } else if (randomWord) {
     screen = (
       <GameScreen
-        userNumber={userNumber}
-        roundsNumber={guessRounds}
-        onStartNewGame={startNewGameHandler}
+        onGameOver={gameOverHandler}
+        randomWord={randomWord}
+      />
+    );
+  } else {
+    screen = (
+      <StartGameScreen onRandomWord={randomWordHandler} />
+    );
+  }
+
+
+  if (gameIsOver && randomWord) {
+    screen = (
+      <GameScreen
+        onGameOver={gameOverHandler}
         randomWord={randomWord}
       />
     );
   }
+
+
+  
 
   return (
     <LinearGradient colors={[Colors.primary700, Colors.primary600, Colors.primary500, Colors.primary400]} style={styles.rootScrene}>

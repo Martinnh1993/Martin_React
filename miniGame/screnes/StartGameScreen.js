@@ -8,9 +8,8 @@ import Title from '../components/ui/Title';
 import Card from '../components/ui/Card';
 import InstructionText from '../components/ui/InstructionText';
 
-function StartGameScreen({ onPickNumber, onRandomWord }) {
+function StartGameScreen({ onRandomWord }) {
   const [enteredValue, setEnteredValue] = useState('');
-  const [randomWord, setRandomWord] = useState('');
 
   function textInputHandler(enteredText) {
     setEnteredValue(enteredText);
@@ -33,8 +32,7 @@ function StartGameScreen({ onPickNumber, onRandomWord }) {
 
       if (response && response.word) {
         const word = response.word;
-        onPickNumber(chosenNumber); // Pass the chosen number
-        onRandomWord(word); // Pass the random word
+        onRandomWord(word); // Pass the random word only
         console.log('start game screen:', word);
       } else {
         Alert.alert(
@@ -69,9 +67,9 @@ function StartGameScreen({ onPickNumber, onRandomWord }) {
 
   return (
     <View style={styles.rootContainer}>
-      <Title>Guess my word</Title>
+      <Title>Hangman</Title>
       <Card>
-        <InstructionText>Enter a number</InstructionText>
+        <InstructionText style={styles.text}>Enter the number of letters you would like in the word</InstructionText>
         <TextInput
           style={styles.textInput}
           maxLength={10}
@@ -119,4 +117,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flex: 1,
   },
+  text:{
+    textAlign: 'center'
+  }
 });

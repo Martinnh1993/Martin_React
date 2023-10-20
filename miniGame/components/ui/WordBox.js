@@ -10,13 +10,12 @@ const WordBox = ({ word, guessedLetters }) => {
   return (
     <View style={styles.container}>
       {wordArray.map((letter, index) => (
-        <LetterCard key={index}>
-          {guessedLetters.includes(letter) ? (
-            <Text style={styles.cardFront}>{letter}</Text>
-          ) : (
-            <View style={styles.cardBack} />
-          )}
-        </LetterCard>
+        <View key={index} style={styles.cardContainer}>
+          <LetterCard
+            letter={letter}
+            guessed={guessedLetters.includes(letter)}
+          />
+        </View>
       ))}
     </View>
   );
@@ -26,26 +25,19 @@ export default WordBox;
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    height: 150,
-    flexDirection: 'row',
+    height: 160,
     padding: 10,
     borderRadius: 10,
-    backgroundColor: Colors.primary700,
-  },
-  cardBack: {
-    justifyContent: 'center',
-    backgroundColor: 'white'
-    
-  },
-  cardFront: {
-    fontSize: 40,
+    borderWidth: 2,
+    borderColor: Colors.accent500,
     backgroundColor: 'transparent',
-    borderWidth:2,
-    borderColor: 'white',
-    color: 'white',
-    fontWeight: '700',
-    textAlign: 'center',
+    overflow: 'hidden',
+    marginBottom: 10
+  },
+  cardContainer: {
+    margin: 5, // Adjust the margin as needed
   },
 });

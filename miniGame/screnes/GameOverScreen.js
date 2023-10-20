@@ -1,57 +1,23 @@
-import { View, Image, StyleSheet, Text } from "react-native";
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 
-import Title from "../components/ui/Title";
-import Colors from "../constants/colors";
-import PrimaryButton from "../components/ui/PrimaryButton";
-
-function GameOverScreen({roundsNumber, userNumber, onStartNewGame}) {
-    return <View style={styles.rootContainer}>
-        <Title>Game Over</Title>
-            <View style={styles.imageContainer}>
-                <Image 
-                style={styles.image}
-                source={require('../assets/images/success.png')}
-                />
-            </View>
-            <Text style={styles.summaryText}>
-                Your phone needed <Text style={styles.highlight}>{roundsNumber}</Text> rounds to guess the number {''}
-                <Text style={styles.highlight}>{userNumber}</Text>
-            </Text>
-            <PrimaryButton onPress={onStartNewGame}>Start new game</PrimaryButton>
+const GameOverScreen = ({ numberOfRounds, onNewGame }) => {
+  return (
+    <View style={styles.screen}>
+      <Text>Game Over!</Text>
+      <Text>Number of Rounds: {numberOfRounds}</Text>
+      {/* Add a button or UI element to start a new game */}
+      {/* For example: <Button title="New Game" onPress={onNewGame} /> */}
     </View>
-}
-
-export default GameOverScreen;
+  );
+};
 
 const styles = StyleSheet.create({
-    rootContainer:{
-        flex: 1,
-        padding: 24,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    imageContainer: {
-        width: 300,
-        height: 300,
-        borderRadius: 150,
-        borderWidth: 3,
-        borderColor: Colors.primary700,
-        overflow: 'hidden',
-        margin: 36
-    },
-    image: {
-        width: '100%',
-        height: '100%',
+  screen: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
-    },
-    summaryText: {
-        fontFamily: 'open-sans',
-        fontSize: 24,
-        textAlign: 'center',
-        marginBottom: 24
-    },
-    highlight: {
-        fontFamily: 'open-sans-bold',
-        color: Colors.primary500
-    }
-})
+export default GameOverScreen;
