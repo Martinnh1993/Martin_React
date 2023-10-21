@@ -33,7 +33,7 @@ function StartGameScreen({ onRandomWord }) {
       if (response && response.word) {
         const word = response.word;
         onRandomWord(word); // Pass the random word only
-        console.log('start game screen:', word);
+        // console.log('start game screen:', word);
       } else {
         Alert.alert(
           'No words found with that length. Response data:',
@@ -58,7 +58,7 @@ function StartGameScreen({ onRandomWord }) {
 
     try {
       const response = await axios.request(options);
-      console.log('word from fetch:', response.data);
+      // console.log('word from fetch:', response.data);
       return response.data;
     } catch (error) {
       console.error(error);

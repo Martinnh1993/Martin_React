@@ -12,33 +12,30 @@ import KeyboardAvoidingContainer from "../components/KeyboardAvoidingContainer";
 
 
 
-function GameScreen({ randomWord, onGameOver, numberOfRounds  }) {
+function GameScreen({ randomWord, onGameOver, wrongGuesses  }) {
   const [enteredValue, setEnteredValue] = useState('');
   const [guessedLetters, setGuessedLetters] = useState([]);
   const [wrongLetters, setWrongLetters] = useState([]);
   const maxAttempts = 6;
   const [attempts, setAttempts] = useState(maxAttempts);
-  // const {isWordGuessed, setIsWordGuessed} = useState(false);
 
   useEffect(() => {
-    if (attempts <= 0) {
-      // Calculate roundsRemaining based on the number of attempts remaining
-      const roundsRemaining = maxAttempts - attempts;
-      onGameOver(roundsRemaining); // Pass roundsRemaining to onGameOver
-    }
-  }, [attempts, onGameOver]);
+    setAttempts(maxAttempts- wrongLetters.length)
+    if (attempts === 0) {
+      onGameOver(maxAttempts - attempts);
+    } 
+    if (isWordGuessed(guessedLetters, randomWord)) {
+        // Handle game over for a correct word guess
+        onGameOver(maxAttempts - attempts);
+      }  
+  }, [guessedLetters, randomWord, onGameOver, maxAttempts, attempts]);
+  
   
 
 
   function confirmInputHandler() {
     const enteredText = enteredValue.trim().toLowerCase();
 
-    if (isWordGuessed(guessedLetters, randomWord)) {
-      // Handle game over for a correct word guess
-      onGameOver(maxAttempts - attempts);
-      return; // Exit the function to prevent further processing
-    }
-  
     if (guessedLetters.includes(enteredText)) {
       setEnteredValue('');
       Alert.alert('Duplicate Guess', 'You already guessed this letter/word.', [{ text: 'Okay' }]);
@@ -47,31 +44,30 @@ function GameScreen({ randomWord, onGameOver, numberOfRounds  }) {
   
     if (enteredText === randomWord) {
       // Handle game over for a correct word guess
+      setGuessedLetters(randomWord.split(''));
       onGameOver(maxAttempts - attempts);
       return; // Exit the function to prevent further processing
     }
+
   
     if (enteredText.length === 1) {
       setGuessedLetters((prevLetters) => [...prevLetters, enteredText]);
   
       if (!randomWord.includes(enteredText)) {
-        setAttempts((prevAttempts) => prevAttempts - 1);
         setWrongLetters((prevWrongLetters) => [...prevWrongLetters, enteredText]);
+      } else {
+        // Correct letter guess; no need to increment numberOfRounds
       }
     } else {
       setGuessedLetters((prevLetters) => [...prevLetters, enteredText]);
-  
       // Check if all letters have been correctly guessed
       if (isWordGuessed(guessedLetters, randomWord)) {
         // Handle game over for a correct word guess
         onGameOver(maxAttempts - attempts);
         return; // Exit the function to prevent further processing
       }
-  
-      setAttempts((prevAttempts) => prevAttempts - 1);
       setWrongLetters((prevWrongLetters) => [...prevWrongLetters, enteredText]);
     }
-  
     setEnteredValue('');
   }
   
@@ -86,16 +82,10 @@ function GameScreen({ randomWord, onGameOver, numberOfRounds  }) {
         lettersGuessed[index] = true;
       }
     }
-  
     // Check if all letters have been guessed
     return lettersGuessed.every((guessed) => guessed);
   }
   
-  
-  
-  
-  
-
   function resetInputHandler() {
       setEnteredValue('');
   }

@@ -5,20 +5,20 @@ import Colors from "../constants/colors";
 import PrimaryButton from "../components/ui/PrimaryButton";
 import Card from "../components/ui/Card";
 
-function GameOverScreen({numberOfRounds, onStartNewGame}) {
+function GameOverScreen({wrongGuesses, onStartNewGame}) {
   let titleText = '';
   let stats = '';
   let endImage = null;
 
-  if (numberOfRounds === 0) {
+  if (wrongGuesses < 6) {
     endImage = (
       <Image
         style={styles.image}
         source={require('../assets/images/victory.jpg')}
       />
     );
-    titleText = 'Won';
-    stats = 'win';
+    titleText = 'Victory!';
+    stateText = `Congratulation you guessed the with with ${wrongGuesses} wrong guesses`;
   } else {
     endImage = (
       <Image
@@ -26,16 +26,16 @@ function GameOverScreen({numberOfRounds, onStartNewGame}) {
         source={require('../assets/images/loss.jpg')}
       />
     );
-    titleText = 'Lost';
-    stats = 'lose';
+    titleText = 'Defeat!';
+    stateText = `Sorry you didn't manage to guess the word in 6 rounds`;
   }
 
   return <View style={styles.rootContainer}>
-      <Title>You {titleText} the game</Title>
+      <Title>{titleText}</Title>
       <View style={styles.imageContainer}>{endImage}</View>
           <Card>
             <Text style={styles.summaryText}>
-                it took you {numberOfRounds} rounds to guess the word and {titleText} the game.
+                {stateText}
             </Text>
             <PrimaryButton onPress={onStartNewGame}>Start new game</PrimaryButton>
           </Card>

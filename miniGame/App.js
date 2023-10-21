@@ -12,7 +12,9 @@ import Colors from './constants/colors';
 export default function App() {
   const [gameIsOver, setGameIsOver] = useState(true);
   const [randomWord, setRandomWord] = useState('');
-  const [numberOfRounds, setNumberOfRounds] = useState(0);
+  const [wrongGuesses, setWrongGuesses] = useState(0);
+  const [delayedTransition, setDelayedTransition] = useState(false); // Add this state
+
 
   
   const [fontsLoaded] = useFonts({
@@ -29,14 +31,18 @@ export default function App() {
     setGameIsOver(false);
   }
 
-  function gameOverHandler(numberOfRounds) {
-    setGameIsOver(true);
-    setNumberOfRounds(numberOfRounds);
+  function gameOverHandler(wrongGuesses) {
+    setDelayedTransition(true);
+  
+    setTimeout(() => {
+      setGameIsOver(true);
+      setWrongGuesses(wrongGuesses);
+      setDelayedTransition(false);
+    }, 2000); // 2000 milliseconds (2 seconds)
   }
   
-
   function startNewGameHandler() {
-    setNumberOfRounds(0);
+    setWrongGuesses(0);
     setRandomWord('');
   }
 
@@ -45,10 +51,9 @@ export default function App() {
   if (gameIsOver && randomWord) {
     screen = (
       <GameOverScreen
-      numberOfRounds={numberOfRounds}
+      wrongGuesses={wrongGuesses}
       onStartNewGame={startNewGameHandler}
     />
-    
     );
   } else if (randomWord) {
     screen = (
@@ -61,11 +66,7 @@ export default function App() {
     screen = (
       <StartGameScreen onRandomWord={randomWordHandler} />
     )
-    }
-  
-  
-
-  
+  }
 
   return (
     <LinearGradient colors={[Colors.primary700, Colors.primary600, Colors.primary500, Colors.primary400]} style={styles.rootScrene}>
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     resizeMode: 'cover',
-    opacity: 1,
+    opacity: 0.7,
     justifyContent: 'center',
     alignItems: 'flex-end'
   }
