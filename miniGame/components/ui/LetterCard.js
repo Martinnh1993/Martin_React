@@ -44,11 +44,7 @@ const LetterCard = ({ letter, guessed }) => {
       height: 60,
       width: 40,
       borderRadius: 8,
-      elevation: 4,
-      shadowColor: 'black',
-      shadowOffset: { width: 0, height: 8 },
-      shadowRadius: 6,
-      shadowOpacity: 0.5,
+      
     },
     card: {
       flex: 1,

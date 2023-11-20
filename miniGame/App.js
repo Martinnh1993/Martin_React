@@ -15,8 +15,6 @@ export default function App() {
   const [wrongGuesses, setWrongGuesses] = useState(0);
   const [delayedTransition, setDelayedTransition] = useState(false); // Add this state
 
-
-  
   const [fontsLoaded] = useFonts({
     'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
     'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf')
@@ -67,7 +65,6 @@ export default function App() {
       <StartGameScreen onRandomWord={randomWordHandler} />
     )
   }
-
   return (
     <LinearGradient colors={[Colors.primary700, Colors.primary600, Colors.primary500, Colors.primary400]} style={styles.rootScrene}>
       <ImageBackground

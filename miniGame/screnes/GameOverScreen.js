@@ -7,7 +7,6 @@ import Card from "../components/ui/Card";
 
 function GameOverScreen({wrongGuesses, onStartNewGame}) {
   let titleText = '';
-  let stats = '';
   let endImage = null;
 
   if (wrongGuesses < 6) {
