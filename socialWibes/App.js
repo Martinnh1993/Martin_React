@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
 
   },
   textInput: {
-    marginTop: 50,
+    marginTop: 20,
     borderColor: 'black',
     height: 30,
     borderRadius: 10,
@@ -114,6 +114,7 @@ const styles = StyleSheet.create({
   messageContainer: {
     width: 300,
     marginTop: 10,
+    marginBottom: 10,
     flexDirection: 'row',
     alignItems: 'center'
   },
