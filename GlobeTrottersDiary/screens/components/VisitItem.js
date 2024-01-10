@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import { FontAwesome5 } from '@expo/vector-icons';
-import { GlobalStyles, colors } from '../../GlobalStyles';
+import React from 'react'
+import { View, Text, StyleSheet, Image } from 'react-native'
+import { FontAwesome5 } from '@expo/vector-icons'
+import { GlobalStyles, colors } from '../../GlobalStyles'
 
 const VisitItem = ({ headerText, imageUrl }) => {
 
@@ -19,8 +19,8 @@ const VisitItem = ({ headerText, imageUrl }) => {
                 </View>
             )}
         </View>
-    );
-};
+    )
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -28,16 +28,16 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 10,
         margin: 5,
-        width: '45%', // Adjust width to fit two items side by side
-        aspectRatio: 1, // Makes the box square
+        width: '45%', 
+        aspectRatio: 1
     },
     headerContainer: {
-        flexDirection: 'row', // Align items in a row
+        flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-evenly'
     },
     header: {
-        marginLeft: 8, // Add some space between the icon and the text
+        marginLeft: 8,
         color: 'black',
         fontSize: 16,
         fontWeight: 'bold',
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     placeholderImage: {
         width: '100%',
         height: '85%',
-        backgroundColor: 'black', // Placeholder background color
+        backgroundColor: 'black',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 5,
@@ -60,6 +60,6 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 14,
     },
-});
+})
 
-export default VisitItem;
+export default VisitItem

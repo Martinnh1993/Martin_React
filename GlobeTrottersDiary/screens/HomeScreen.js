@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import { GlobalStyles, colors } from '../GlobalStyles';
+import React from 'react'
+import { View, Text, StyleSheet, Image } from 'react-native'
+import { GlobalStyles, colors } from '../GlobalStyles'
 
 const HomeScreen = () => {
     return (
@@ -11,8 +11,8 @@ const HomeScreen = () => {
             style={styles.logo}
             />
         </View>
-    );
-};
+    )
+}
 
 const styles = StyleSheet.create({
     container: {

@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps';
-import { StyleSheet, View, Alert, Text, Pressable } from 'react-native';
-import { db, collection, addDoc, getDocs, deleteDoc, doc } from '../Firebase';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import React, { useState, useEffect } from 'react'
+import MapView, { PROVIDER_GOOGLE, Marker, Callout } from 'react-native-maps'
+import { StyleSheet, View, Alert, Text, Pressable } from 'react-native'
+import { db, collection, addDoc, getDocs, deleteDoc, doc } from '../Firebase'
 
 const initialRegion = {
     latitude: 55.67594,
@@ -12,25 +11,25 @@ const initialRegion = {
 }
 
 const MapScreen = () => {
-    const [markers, setMarkers] = useState([]);
-    const [selectedMarker, setSelectedMarker] = useState(null);
+    const [markers, setMarkers] = useState([])
+    const [selectedMarker, setSelectedMarker] = useState(null)
 
     useEffect(() => {
         const fetchMarkers = async () => {
             try {
-                const querySnapshot = await getDocs(collection(db, 'markers'));
+                const querySnapshot = await getDocs(collection(db, 'markers'))
                 const fetchedMarkers = querySnapshot.docs.map(doc => ({
                     ...doc.data(),
                     id: doc.id
                 }));
-                setMarkers(fetchedMarkers);
+                setMarkers(fetchedMarkers)
             } catch (e) {
-                console.error("Error fetching markers: ", e);
+                console.error("Error fetching markers: ", e)
             }
         };
 
         fetchMarkers();
-    }, []);
+    }, [])
 
     const addMarkerToFirebase = async (marker) => {
         try {
@@ -39,14 +38,14 @@ const MapScreen = () => {
                 latitude: marker.latitude,
                 longitude: marker.longitude,
             });
-            console.log("Marker added with ID:", docRef.id);
+            console.log("Marker added with ID:", docRef.id)
         } catch (e) {
-            console.error("Error adding marker: ", e);
+            console.error("Error adding marker: ", e)
         }
     };
     
     const handleLongPress = (event) => {
-        const { latitude, longitude } = event.nativeEvent.coordinate;
+        const { latitude, longitude } = event.nativeEvent.coordinate
     
         Alert.prompt(
             "Name Your Marker",
@@ -72,24 +71,24 @@ const MapScreen = () => {
                 }
             ],
             "plain-text"
-        );
-    };
+        )
+    }
     
     const handleMarkerPress = (marker) => {
-        setSelectedMarker(marker);
-    };
+        setSelectedMarker(marker)
+    }
 
     const deleteMarker = async (markerId) => {
         try {
-            console.log(`Attempting to delete marker with ID: ${markerId}`);
-            await deleteDoc(doc(db, 'markers', markerId));
-            console.log(`Marker with ID: ${markerId} deleted`);
-            setMarkers(markers.filter(marker => marker.id !== markerId));
-            setSelectedMarker(null);
+            console.log(`Attempting to delete marker with ID: ${markerId}`)
+            await deleteDoc(doc(db, 'markers', markerId))
+            console.log(`Marker with ID: ${markerId} deleted`)
+            setMarkers(markers.filter(marker => marker.id !== markerId))
+            setSelectedMarker(null)
         } catch (e) {
-            console.error("Error removing marker: ", e);
+            console.error("Error removing marker: ", e)
         }
-    };
+    }
 
     const confirmAndDeleteMarker = (markerId) => {
         Alert.alert(
@@ -104,8 +103,8 @@ const MapScreen = () => {
                     text: "OK", onPress: () => deleteMarker(markerId) 
                 }
             ]
-        );
-    };
+        )
+    }
 
     return (
         <View style={styles.container}>
@@ -134,8 +133,8 @@ const MapScreen = () => {
             ))}
             </MapView>
         </View>
-    );
-};
+    )
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -150,4 +149,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default MapScreen;
+export default MapScreen

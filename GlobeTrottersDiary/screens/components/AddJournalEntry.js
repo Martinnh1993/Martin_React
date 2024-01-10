@@ -1,26 +1,24 @@
-import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, StyleSheet, Text, Pressable, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { GlobalStyles, colors } from '../../GlobalStyles';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import { MaterialIcons } from '@expo/vector-icons';
+import React, { useState } from 'react'
+import { View, TextInput, TouchableOpacity, StyleSheet, Text, Pressable, TouchableWithoutFeedback, Keyboard } from 'react-native'
+import { GlobalStyles, colors } from '../../GlobalStyles'
+import DateTimePicker from '@react-native-community/datetimepicker'
+import { MaterialIcons } from '@expo/vector-icons'
 
 const AddJournalEntry = ({ onSave, onCancel }) => {
-    const [title, setTitle] = useState('');
-    const [date, setDate] = useState(new Date());
-    const [diary, setDiary] = useState('');
-    const [showDatePicker, setShowDatePicker] = useState(false);
+    const [title, setTitle] = useState('')
+    const [date, setDate] = useState(new Date())
+    const [diary, setDiary] = useState('')
+    const [showDatePicker, setShowDatePicker] = useState(false)
 
     const handleSave = () => {
-        onSave(title, date, diary);
-    };
+        onSave(title, date, diary)
+    }
 
     const formatDate = (date) => {
-        return date.toDateString(); // Format as 'Mon Jan 01 2021'
-    };
+        return date.toDateString()
+    }
 
     return (
-        
-          
         <View style={GlobalStyles.container}>
             <View style={styles.titleContainer}>
                 <Text style={GlobalStyles.title}>Add a new Journal entry</Text>   
@@ -68,8 +66,8 @@ const AddJournalEntry = ({ onSave, onCancel }) => {
                 </TouchableOpacity>
             </View>
         </View>
-    );
-};
+    )
+}
 
 const styles = StyleSheet.create({
     titleContainer: {
@@ -99,7 +97,7 @@ const styles = StyleSheet.create({
    dateButton: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: colors.secondary, // Light background color
+        backgroundColor: colors.secondary, 
         padding: 10,
         borderRadius: 5,
         marginTop: 10,
@@ -109,8 +107,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textDecorationLine: 'underline',
     },
-  
-  
-});
+})
 
-export default AddJournalEntry;
+export default AddJournalEntry

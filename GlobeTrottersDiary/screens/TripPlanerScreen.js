@@ -1,13 +1,13 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React from 'react'
+import { View, Text, StyleSheet } from 'react-native'
 
 const TripPlanerScreen = () => {
     return (
         <View style={styles.container}>
             <Text>TripPlanerScreen</Text>
         </View>
-    );
-};
+    )
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -15,6 +15,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-});
+})
 
-export default TripPlanerScreen;
+export default TripPlanerScreen

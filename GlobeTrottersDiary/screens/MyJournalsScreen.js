@@ -1,35 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Pressable, Modal } from 'react-native';
-import { db, collection, getDocs, onSnapshot, addDoc } from '../Firebase';
-import JournalItem from './components/JournalItem';
-import { GlobalStyles, colors } from '../GlobalStyles';
-import { MaterialIcons } from '@expo/vector-icons';
-import AddJournalEntry from './components/AddJournalEntry';
+import React, { useState, useEffect } from 'react'
+import { View, Text, StyleSheet, FlatList, Pressable, Modal } from 'react-native'
+import { db, collection, getDocs, onSnapshot, addDoc } from '../Firebase'
+import JournalItem from './components/JournalItem'
+import { GlobalStyles, colors } from '../GlobalStyles'
+import { MaterialIcons } from '@expo/vector-icons'
+import AddJournalEntry from './components/AddJournalEntry'
 
 const MyJournalsScreen = () => {
-    const [journalList, setJournalList] = useState([]);
-    const [addModalVisible, setAddModalVisible] = useState(false);
+    const [journalList, setJournalList] = useState([])
+    const [addModalVisible, setAddModalVisible] = useState(false)
 
     const getJournalList = () => {
         onSnapshot(collection(db, "journals"), (querySnapshot) => {
-            const items = [];
+            const items = []
             querySnapshot.forEach((doc) => {
                 items.push({
                     ...doc.data(),
                     id: doc.id,
-                });
-            });
+                })
+            })
             // Sort items by date (oldest first)
-            items.sort((a, b) => (a.date.toDate() > b.date.toDate()) ? 1 : -1);
-            setJournalList(items);
-        });
-    };
+            items.sort((a, b) => (a.date.toDate() > b.date.toDate()) ? 1 : -1)
+            setJournalList(items)
+        })
+    }
 
     const handleSaveEntry = (title, date, diary) => {
         // Check if any field is empty
         if (!title.trim() || !date || !diary.trim()) {
-            alert("Please fill in all fields before saving."); // Alert the user
-            return; // Return early to prevent saving an empty entry
+            alert("Please fill in all fields before saving.")
+            return
         }
     
         const addJournalItem = async () => {
@@ -39,15 +39,15 @@ const MyJournalsScreen = () => {
                     date: date,
                     diary: diary
                 });
-                console.log("Document written with id:", docRef.id);
+                console.log("Document written with id:", docRef.id)
             } catch (e) {
-                console.error("Error adding document: ", e);
+                console.error("Error adding document: ", e)
             }
-        };
+        }
     
         addJournalItem();
-        setAddModalVisible(false); // Close the modal only after validating the input
-    };
+        setAddModalVisible(false)
+    }
      
     useEffect(() => {
         getJournalList()
@@ -77,8 +77,8 @@ const MyJournalsScreen = () => {
                 keyExtractor={item => item.id}
             />
         </View>
-        );
-};
+        )
+}
 
 const styles = StyleSheet.create({
     addButton: {
@@ -95,4 +95,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default MyJournalsScreen;
+export default MyJournalsScreen
